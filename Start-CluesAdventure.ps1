@@ -457,18 +457,18 @@ $deadh["rev"] = "You spot a small hole in the chest.";
 switch($weapon)
 {
 
-  $objh["axe"] { $npc[$body][4] = $deadh["axe"] ; break; }
-  $objh["bom"] { $npc[$body][4] = $deadh["bom"] ; break; }
+  $objh["axe"] { $npc[$body][4] = $deadh["axe"]; break; }
+  $objh["bom"] { $npc[$body][4] = $deadh["bom"]; break; }
 
-  $objh["poi"] { $npc[$body][4] = $deadh["poi"] ; break; }
-  $objh["rop"] { $npc[$body][4] = $deadh["rop"] ; break; }
+  $objh["poi"] { $npc[$body][4] = $deadh["poi"]; break; }
+  $objh["rop"] { $npc[$body][4] = $deadh["rop"]; break; }
 
-  $objh["can"] { $npc[$body][4] = $deadh["can"] ; break; }
-  $objh["pip"] { $npc[$body][4] = $deadh["pip"] ; break; }
-  $objh["wre"] { $npc[$body][4] = $deadh["wre"] ; break; }
+  $objh["can"] { $npc[$body][4] = $deadh["can"]; break; }
+  $objh["pip"] { $npc[$body][4] = $deadh["pip"]; break; }
+  $objh["wre"] { $npc[$body][4] = $deadh["wre"]; break; }
 
-  $objh["dag"] { $npc[$body][4] = $deadh["dag"] ; break; }
-  $objh["rev"] { $npc[$body][4] = $deadh["rev"] ; break; }
+  $objh["dag"] { $npc[$body][4] = $deadh["dag"]; break; }
+  $objh["rev"] { $npc[$body][4] = $deadh["rev"]; break; }
    
 }
 
@@ -688,8 +688,8 @@ while ($running)
     $object  = $command.Substring(($index + 1)).Trim();
     $command = $command.Substring(0, $index).Trim();
   }
-  if ($object.Length  -ge 3) { $object  = $object.Substring(0,3);  }
-  if ($command.Length -ge 3) { $command = $command.Substring(0,3); }
+  if ($object.Length  -ge 3) { $object  = $object.Substring(0, 3);  }
+  if ($command.Length -ge 3) { $command = $command.Substring(0, 3); }
   Start-Sleep -Seconds 0.55; # feels just like the 1980's again!
 
   # Check for command synonyms
@@ -703,8 +703,8 @@ while ($running)
   # Accuse command (accuses a non-player character of the crime)
   if ($command -eq "acc")
   {
-    $score   = 0;
-    $total   = 4;
+    $score = 0;
+    $total = 4;
     if ($location -eq $room) { $score++; }        # correct location?
     $where = $map[$room][0];
     $key   = $npch[$object];
