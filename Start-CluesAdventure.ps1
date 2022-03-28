@@ -63,11 +63,13 @@ Please give to cancer research!
 
 History:
 01.00 2022-Mar-18 Scott S. Initial release.
+01.01 2022-Mar-28 Scott S. Added requires version.
 
 .LINK
 https://en.wikipedia.org/wiki/Cluedo
 
 #>
+#Requires -Version 5.1
 param
 (
 
@@ -315,6 +317,9 @@ $synoh["ver"] = "com"; # verb
 
 $synoh["exo"] = "exo"; # exotic
 $synoh["pla"] = "exo"; # plant
+
+$synoh["cel"] = "loc"; # cellar
+$synoh["loc"] = "loc"; # lock
 
 $synoh["map"] = "map"; # map
 $synoh["roo"] = "map"; # room
@@ -1178,6 +1183,7 @@ while ($running)
                 }
                 $npc[$key][2] = $escape;
                 $reply        = "$reply ran screaming out of the room.";
+
               }
             }
             else
@@ -1217,7 +1223,17 @@ while ($running)
         {
           if ($darkness)           # room is dark?
           {
-            $reply = "Smooch, smooch ...";
+
+            # Non-player character provides a hint
+            $who    = $reply;
+            $reply  = "Smooch, smooch ... Oh, $who!";
+            $chance = (Get-Random -Maximum 100);
+            if ($chance -ge $difficulty)
+            {
+              $reply = `
+                "$reply`n  $who smiles and says `"Read the $docType.`"";
+            }
+
           }
           else
           {
