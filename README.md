@@ -12,7 +12,7 @@ To enable PowerShell scripts, you may need to update your execution policy.  Fin
 
 ... and press the enter key.  Enter "Y" and press the enter key again.
 
-The program first displays information about the current room, and then accepts two-word commands that are used to interact with the characters and objects.  Each command is split on the space, and the first three characters of each word are retrieved.  If a word is longer than three characters, the value is trimmed.  In this game, the three-characters must uniquely identify a room, object, character or command.
+The text adventure game first displays information about the current room, and then accepts two-word commands that are used to interact with the characters and objects.  Each command is split on the space, and the first three characters of each word are retrieved.  If a word is longer than three characters, the value is trimmed.  In this game, the three-characters must uniquely identify a room, object, character or command.
 
 A player would enter the commands as follows:
 
