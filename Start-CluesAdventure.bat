@@ -1,6 +1,5 @@
 :: launches the script from a batch file
 :: batch files can be double-clicked (unlike PowerShell scripts)
-:: changes the drive letter and path to the launch (current) folder
 :: Microsoft PowerShell.exe executable must be in the search path
 
 :: do not echo command outputs to the console
@@ -17,7 +16,7 @@ cd /d %~dp0
 
 :: start the script in PowerShell
 :: use "&" for quoted paths that allow for spaces
-PowerShell.exe -Command "& .\Start-CluesAdventure.ps1"
+PowerShell.exe -Command "& '%cd%\Start-CluesAdventure.ps1'"
 
 :: pause on error
 if not ["%errorlevel%"]==["0"] pause

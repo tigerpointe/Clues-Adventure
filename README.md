@@ -10,9 +10,9 @@ To enable PowerShell scripts, you may need to update your execution policy.  Fin
 
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted
 
-... and press the enter key.  Type "Y" and press the enter key again.  Even as "Unrestricted", PowerShell will prompt you for a confirmation before running any untrusted scripts.
+... and press the enter key.  Type "Y" and press the enter key again.  When the execution policy is set as "Unrestricted", PowerShell will prompt you for a confirmation before running any untrusted scripts.  By default, PowerShell will not run any scripts downloaded from the Internet.
 
-More secure PowerShell options exist that involve unblocking or bypassing the individual script file.  Unfortunately, further knowledge of PowerShell is required.  In Windows 11, you can right-click and select the "Run as PowerShell" option.
+More secure PowerShell options exist that involve unblocking or bypassing the individual script file.  Before making any changes, a detailed understanding of PowerShell security is highly recommended.  In Windows 11, you can simply right-click on the game script and select the "Run as PowerShell" option.
 
 The text adventure game first displays information about the current room, and then accepts two-word commands that are used to interact with the characters and objects.  Each command is split on the space, and the first three characters of each word are retrieved.  If a word is longer than three characters, the value is trimmed.  In this game, the three-characters must uniquely identify a room, object, character or command.
 
@@ -23,7 +23,7 @@ A player would enter the commands as follows:
 
 Compass directions can be simplified and entered as a single word or letter.  So, "WALK NORTH" would be equivalent to "NORTH" or "N".
 
-More complicated commands can be constructed to prompt the player for additional information.  For example, entering "ACCUSE COLONEL" might then ask the player to identify a specific weapon.
+More complicated commands can be constructed to prompt the player for additional information.  For example, entering "ACCUSE COLONEL" might then ask the player to identify a specific murder weapon.
 
 Information tables are used to define the rooms, objects, characters and commands.  In this script, two dimensional arrays have been implemented.  However, object-oriented classes could have just as easily been implemented, as well as database tables.  The important point here is to have your items represented as rows, with each column representing a different attribute of the item.
 
@@ -46,5 +46,7 @@ The program itself functions like one giant state machine, continually looping u
 That's really all that needs to be done to create your own game.
 
 A sample batch file script launcher has been included with this project, as many players may not know how to start PowerShell.  The launcher allows players to easily start the game by double-clicking on a batch file.
+
+I've also included a batch file that attempts to set the PowerShell execution policy to "RemoteSigned" and unblock the game script.  The batch file must be started with the right-click "Run as administrator" option.  Be sure to extract all files from this project into the same folder.
 
 Journey on, adventurer!
