@@ -6,11 +6,13 @@ Nothing makes me happier than to take a powerful administrative tool, like Power
 
 This PowerShell script demonstrates how to write an "old school" text adventure game.  It is written much like the BASIC programs of the 1980's -- with no functions or variable scope.  Everything is global for simplicity.
 
-To enable PowerShell scripts, you may need to update your execution policy.  Find the PowerShell icon on your system, right-click and select the "Run as administrator" option.  Type ...
+To enable PowerShell scripts, you may need to update your execution policy.  Find the PowerShell icon on your system, right-click and select the "Run as administrator" option.  Then, type ...
 
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted
 
-... and press the enter key.  Type "Y" and press the enter key again.  Even as "Unrestricted", PowerShell will still prompt you for a confirmation before running any untrusted script.
+... and press the enter key.  Type "Y" and press the enter key again.  Even as "Unrestricted", PowerShell will prompt you for a confirmation before running any untrusted scripts.
+
+More secure PowerShell options exist that involve unblocking or bypassing the individual script file.  Unfortunately, further knowledge of PowerShell is required.  In Windows 11, you can right-click and select the "Run as PowerShell" option.
 
 The text adventure game first displays information about the current room, and then accepts two-word commands that are used to interact with the characters and objects.  Each command is split on the space, and the first three characters of each word are retrieved.  If a word is longer than three characters, the value is trimmed.  In this game, the three-characters must uniquely identify a room, object, character or command.
 
