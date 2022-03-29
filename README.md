@@ -16,8 +16,8 @@ The text adventure game first displays information about the current room, and t
 
 A player would enter the commands as follows:
 
-  WALK NORTH
-  EXAMINE ROPE
+        WALK NORTH
+        EXAMINE ROPE
 
 Compass directions can be simplified and entered as a single word or letter.  So, "WALK NORTH" would be equivalent to "NORTH" or "N".
 
