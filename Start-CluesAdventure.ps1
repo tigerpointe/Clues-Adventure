@@ -64,7 +64,7 @@ Please give to cancer research!
 History:
 01.00 2022-Mar-18 Scott S. Initial release.
 01.01 2022-Mar-28 Scott S. Added requires version.
-01.01 2022-Mar-29 Scott S. Added ambiguous object handling.
+01.02 2022-Mar-29 Scott S. Added ambiguous object handling.
 
 .LINK
 https://en.wikipedia.org/wiki/Cluedo
