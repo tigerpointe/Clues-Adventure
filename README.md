@@ -16,7 +16,7 @@ More secure PowerShell options exist that involve unblocking or bypassing the in
 
 The text adventure game first displays information about the current room, and then accepts two-word commands that are used to interact with the characters and objects.  Each command is split on the space, and the first three characters of each word are retrieved.  If a word is longer than three characters, the value is trimmed.  In this game, the three-characters must uniquely identify a room, object, character or command.
 
-A player would enter the commands as follows:
+A player would enter the two-word (verb and noun) commands as follows:
 
         WALK NORTH
         EXAMINE ROPE

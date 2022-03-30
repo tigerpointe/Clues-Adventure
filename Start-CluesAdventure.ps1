@@ -64,6 +64,7 @@ Please give to cancer research!
 History:
 01.00 2022-Mar-18 Scott S. Initial release.
 01.01 2022-Mar-28 Scott S. Added requires version.
+01.01 2022-Mar-29 Scott S. Added ambiguous object handling.
 
 .LINK
 https://en.wikipedia.org/wiki/Cluedo
@@ -365,8 +366,10 @@ $synoh["pro"] = "pea"; # professor
 $synoh["pea"] = "pea"; # peach
 
 # Frequently used data indexes
+$billiard    = $maph["bil"];
 $cellar      = $maph["cel"];
 $crypt       = $maph["cry"];
+$dining      = $maph["din"];
 $kitchen     = $maph["kit"];
 
 $body        = $npch["mor"];
@@ -697,6 +700,10 @@ while ($running)
   if ($command.Length -ge 3) { $command = $command.Substring(0, 3); }
   Start-Sleep -Seconds 0.55; # feels just like the 1980's again!
 
+  # Check for ambiguous "table" objects
+  if (($object -eq "tab") -and ($room -eq $billiard)) { $object = "poo"; }
+  if (($object -eq "tab") -and ($room -eq $dining))   { $object = "din"; }
+
   # Check for command synonyms
   $synonym = $synch[$command];
   if ($synonym -ne $null) { $command = $synonym; }
@@ -963,7 +970,7 @@ while ($running)
     # List commands
     if (($object -eq "") -or ($object -eq "com"))
     {
-      $reply = "Enter two-word commands, such as:";
+      $reply = "Enter two-word (verb and noun) commands, such as:";
       $reply = "$reply`n    examine body`n    walk north";
       $reply = "$reply`n  The list of commands include:";
       foreach ($c in $cmd)
@@ -1426,11 +1433,12 @@ while ($running)
               $rnd  = (Get-Random -Maximum $hints.Length);
               $hint = $hints[$rnd];
               $ref  = $null;
+              $tmp  = $null;
               switch ($refs[$rnd])
               {
-                "npc" { $ref = $npc; break; }
-                "map" { $ref = $map; break; }
-                "obj" { $ref = $obj; break; }
+                "npc" { $ref = $npc; $tmp = "suspects"; break; }
+                "map" { $ref = $map; $tmp = "rooms";    break; }
+                "obj" { $ref = $obj; $tmp = "weapons";  break; }
               }
               if ($ref -ne $null)
               {
@@ -1439,6 +1447,7 @@ while ($running)
                 $safe  = $ref[$idx][0];
                 $reply = "$reply`n  The item `"$safe`" has been marked-off";
                 $reply = "$reply in your notebook.";
+                $reply = "$reply`n  Enter `"check $tmp`" for details.";
                 $last  = ($ref[$idx].Length - 1);
                 $ref[$idx][$last] = 1;
                 $parsed           = $true;
