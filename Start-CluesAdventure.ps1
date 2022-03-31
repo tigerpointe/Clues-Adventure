@@ -7,9 +7,10 @@ Starts a new tiny text adventure inspired by a well-known mystery board game.
 Solve the murder mystery by deducing the correct suspect, room and weapon.
 Move around the manor by entering compass directions (n, s, w, e, u and d).
 Interact with the suspects and weapons by entering two-word text commands.
+Most text commands are composed of a verb and a noun.
 Suggest possible suspects, rooms and weapons to collect hints about the crime.
 Various objects may also provide important clues about the murder.
-When you are ready, accuse your suspect of murder.
+When you are ready, accuse your suspect to finish the game.
 
 .PARAMETER difficulty
 Specifies a difficulty level for the random game elements (0-99).
@@ -26,11 +27,11 @@ Starts a new game with the default difficulty level.
 
 .EXAMPLE
 .\Start-CluesAdventure.ps1 -difficulty 10
-Starts a new game with an easier difficulty level.
+Starts a new game with a lower difficulty level.
 
 .EXAMPLE
 .\Start-CluesAdventure.ps1 -difficulty 90
-Starts a new game with a harder difficulty level.
+Starts a new game with a higher difficulty level.
 
 .NOTES
 MIT License
@@ -65,6 +66,7 @@ History:
 01.00 2022-Mar-18 Scott S. Initial release.
 01.01 2022-Mar-28 Scott S. Added requires version.
 01.02 2022-Mar-29 Scott S. Added ambiguous object handling.
+01.03 2022-Apr-01 Scott S. Added spontaneous object handling.
 
 .LINK
 https://en.wikipedia.org/wiki/Cluedo
@@ -180,6 +182,7 @@ $txt = @(
 
 # Object structure:
 # Name, Id, Room, Active, Description, Weapon, Fixed, Check
+# Objects can be "hidden" by setting the room number to an invalid value
 $obj = @(
 
 ("axe"          ,"axe", 0,1,"It's dull and covered with rust."        ,1,0,0),
@@ -201,8 +204,10 @@ $obj = @(
 ("old mattress" ,"mat",12,1,"It's very stained."                      ,0,0,0),
 ("paper"        ,"pap", 4,1,"It's {0}'s updated `"{1}`"."             ,0,0,0),
 ("pool table"   ,"poo", 5,1,"The felt is badly worn."                 ,0,1,0),
+("rubber ducky" ,"rub",99,1,"It's yellow and makes a quacking sound." ,0,0,0),
 ("stove"        ,"sto", 0,1,"The gas has been disconnected."          ,0,1,0),
-("towel"        ,"tow",14,1,"It's blue with yellow duckies."          ,0,0,0)
+("towel"        ,"tow",14,1,"It's blue with yellow duckies."          ,0,0,0),
+("tub"          ,"tub",14,1,"It's gross and filled with dirty water." ,0,1,0)
 
 );
 
@@ -223,6 +228,7 @@ $cmd = @(
 ("call"   , "cal", "call    [suspect]"                          , 1),
 ("check"  , "che", "check   [commands|rooms|suspects|weapons]"  , 1),
 ("debug"  , "deb", "debug"                                      , 0),
+("drain"  , "dra", "drain   [object]"                           , 0),
 ("drink"  , "dri", "drink   [object]"                           , 0),
 ("drop"   , "dro", "drop    [object]"                           , 1),
 ("examine", "exa", "examine [object|suspect]"                   , 1),
@@ -267,6 +273,9 @@ $synch["sho"] = "che"; # show
 
 $synch["deb"] = "deb"; # debug
 $synch["sol"] = "deb"; # solve
+
+$synch["dra"] = "dra"; # drain
+$synch["emp"] = "dra"; # empty
 
 $synch["dri"] = "dri"; # drink
 $synch["sip"] = "dri"; # sip
@@ -349,8 +358,14 @@ $synoh["bot"] = "poi"; # bottle
 $synoh["gun"] = "rev"; # gun
 $synoh["rev"] = "rev"; # revolver
 
+$synoh["rub"] = "rub"; # rubber
+$synoh["duc"] = "rub"; # ducky
+
 $synoh["ove"] = "sto"; # oven
 $synoh["sto"] = "sto"; # stove
+
+$synoh["tub"] = "tub"; # tub
+$synoh["wat"] = "tub"; # water
 
 # Non-player character titles synonyms hash
 $synoh["bod"] = "mor"; # body
@@ -383,9 +398,11 @@ $wrench      = $objh["wre"];
 
 $book        = $objh["boo"];
 $document    = $objh["doc"];
+$ducky       = $objh["rub"];
 $lock        = $objh["loc"];
 $mattress    = $objh["mat"];
 $paper       = $objh["pap"];
+$tub         = $objh["tub"];
 
 # Initialization
 $dead      =  $npc[$body][4]; # dead body message
@@ -393,7 +410,7 @@ $count     =  0;              # move count
 $room      =  $maph["gre"];   # starting room (Great Hall)
 $inventory = -1;              # no object currently being carried
 
-# Configure the mystery motive
+# Configure the mystery motive description
 $docType           = "Last Will and Testament";
 $obj[$document][4] = ($obj[$document][4] -f $npc[$body][0], $docType);
 $obj[$paper][4]    = ($obj[$paper][4]    -f $npc[$body][0], $docType);
@@ -678,7 +695,7 @@ while ($running)
   }
   Write-Host "==================================================`n";
 
-  # Show the reply of the previous command
+  # Show the text reply of the previous command
   if ($reply.Length -gt 0)
   {
     Write-Host "> $reply";
@@ -698,7 +715,7 @@ while ($running)
   }
   if ($object.Length  -ge 3) { $object  = $object.Substring(0, 3);  }
   if ($command.Length -ge 3) { $command = $command.Substring(0, 3); }
-  Start-Sleep -Seconds 0.55; # feels just like the 1980's again!
+  Start-Sleep -Seconds 0.55; # it feels just like the 1980s again!
 
   # Check for ambiguous "table" objects
   if (($object -eq "tab") -and ($room -eq $billiard)) { $object = "poo"; }
@@ -745,7 +762,7 @@ while ($running)
           Write-Host "  Murderer:  $($npc[$murderer][0])";
           Write-Host "  Room:      $($map[$location][0])";
           Write-Host "  Weapon:    $($obj[$weapon][0])";
-          if ($motive -ge $allbits)
+          if ($motive -ge $allbits)               # found motive?
           {
             Write-Host "  Motive:    $($npc[$body][0])'s `"$docType`"";
           }
@@ -849,18 +866,24 @@ while ($running)
       {
 
         # Break any other object
+        $reply = $obj[$key][0];
         if (($obj[$key][2] -eq $room) -or `
           ($key -eq $inventory))              # object is in room or carried?
         {
-          $obj[$key][2] =  $room;
-          $obj[$key][3] =  0;
-          $inventory    = -1;
-          $reply = $obj[$key][0];
-          $reply = "Okay, you broke the $reply and it fell to the ground.";
+          if ($obj[$key][3] -gt 0)            # object is active?
+          {
+            $obj[$key][2] =  $room;
+            $obj[$key][3] =  0;
+            $inventory    = -1;
+            $reply = "Okay, you broke the $reply and it fell to the ground.";
+          }
+          else
+          {
+            $reply = "The $reply is already broken.";
+          }
         }
         else
         {
-          $reply = $obj[$key][0];
           $reply = "The $reply is not here.";
         }
       }
@@ -995,7 +1018,47 @@ while ($running)
     $parsed = $true;
   }
 
-   # Drink command (drinks an object)
+  # Drain command (drains an object)
+  if ($command -eq "dra")
+  {
+    $key = $objh[$object];
+    if ($key -ne $null)
+    {
+      $reply = $obj[$key][0];
+      if ($obj[$key][2] -eq $room)            # object is in room?
+      {
+        if ($key -eq $tub)                    # object is tub?
+        {
+          if ($obj[$ducky][2] -gt $map.Count) # ducky room is invalid?
+          {
+
+            # Spontaneously call the rubber ducky into existence by setting
+            # the invalid room value to the current location
+            $what  = $obj[$ducky][0];
+            $reply = "As the $reply drained, you found the $what.";
+            $obj[$key][4]   = "It's been drained.";
+            $obj[$ducky][2] = $room;
+
+          }
+          else
+          {
+            $reply = "Okay, nothing happened.";
+          }
+        }
+        else
+        {
+          $reply = "You cannot drain the $reply.";
+        }
+      }
+      else
+      {
+        $reply = "The $reply is not here.";
+      }
+      $parsed = $true;
+    }
+  }
+
+  # Drink command (drinks an object)
   if ($command -eq "dri")
   {
     $key = $objh[$object];
@@ -1542,7 +1605,7 @@ while ($running)
     }
     else
     {
-      $reply  = "You aren't carrying anything.";
+      $reply  = "You aren't carrying anything usable.";
       $parsed = $true;
     }
   }
@@ -1604,7 +1667,7 @@ while ($running)
  # READ the DOCUMENT to view Mr. Mortem's original "Last Will and Testament".
  # WALK to the Kitchen.
  # GET the AXE, LEAD PIPE or WRENCH (whatever is found).
- # USE either the AXE, LEAD PIPE or WRENCH to BREAK the Cellar door LOCK.
+ # USE either the AXE, LEAD PIPE or WRENCH to BREAK the Cellar LOCK.
  # GET the CANDLESTICK to dispel the Cellar darkness.
  # WALK DOWN into the Cellar.
  # READ the PAPER to reveal an updated "Last Will and Testament".
@@ -1622,4 +1685,4 @@ while ($running)
 
 # End the game
 Write-Host "`nGoodbye.";
-Read-Host  "Press the <Enter> Key to Continue ...";
+Read-Host  "Press the <Enter> Key to Exit ...";

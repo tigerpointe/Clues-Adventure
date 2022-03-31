@@ -4,13 +4,13 @@
 
 Nothing makes me happier than to take a powerful administrative tool, like PowerShell, and completely misuse it for the purposes of entertainment.
 
-This PowerShell script demonstrates how to write an "old school" text adventure game.  It is written much like the BASIC programs of the 1980's -- with no functions or variable scope.  Everything is global for simplicity.
+This PowerShell script demonstrates how to write an "old school" text adventure game.  It is written much like the BASIC programs of the 1980s -- with no functions or variable scope.  Everything is global for simplicity.
 
 To enable PowerShell scripts, you may need to update your execution policy.  Find the PowerShell icon on your system, right-click and select the "Run as administrator" option.  Then, type ...
 
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted
 
-... and press the enter key.  Type "Y" and press the enter key again.  When the execution policy is set as "Unrestricted", PowerShell will prompt you for a confirmation before running any untrusted scripts.  By default, PowerShell will not run any scripts downloaded from the Internet.
+... and press the enter key.  Type "Y" and press the enter key again.  When the execution policy is set as "Unrestricted", PowerShell will prompt you for a confirmation before running any untrusted scripts.  By default, PowerShell will not run any scripts downloaded from the Internet (unless digitally signed).
 
 More secure PowerShell options exist that involve unblocking or bypassing the individual script file.  Before making any changes, a detailed understanding of PowerShell security is highly recommended.  In Windows 11, you can simply right-click on the game script and select the "Run as PowerShell" option.
 
@@ -40,6 +40,8 @@ Hash tables work just like arrays, except that instead of using a numeric index,
 Hash tables can also be used for handling synonyms.  If COMMAND-HASH["GO"], COMMAND-HASH["MOV"] and COMMAND-HASH["WAL"] all returned "WAL", whenever the player entered "GO" or "MOVE" or "WALK", the "WAL" command would be returned, and your code would only have to handle checking for "WAL".  Hash tables simplify the language processing.
 
 If your game allows the player to carry an inventory, all that you need is a way of setting the room attribute on the object to some special "I'm carrying it" inventory value.  A "GET" command would set the room value on the object to that inventory value.  A "DROP" command would set the room value on the object to the current room and clear it from the inventory.
+
+Similarly, objects can be "hidden" until some future event by setting an invalid room value.  For example, a rare gem may remain hidden until the treasure chest is opened.  Once the chest is opened, the invalid room value on the gem can be set to the room value of the chest, thereby bringing the rare gem into the game.
 
 The program itself functions like one giant state machine, continually looping until you quit.  As the player types in commands, hash tables are used to translate those three-character ids into indexes within the information tables.  Each command simply updates some attribute of the information table (like an object room number or status) and then displays a message using the friendly name read from that same information table.  The goal is to create a generic command handler, for which most of the actual work is simply updating a value in the associated information table.
 
