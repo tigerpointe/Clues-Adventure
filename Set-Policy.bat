@@ -20,7 +20,7 @@ echo.
 cd /d %~dp0
 
 :: configure the settings
-set script=%cd%\Start-CluesAdventure.ps1
+set script="%cd%\Start-CluesAdventure.ps1"
 set access=RemoteSigned
 
 :: unblock the script
