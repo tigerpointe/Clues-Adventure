@@ -1082,7 +1082,7 @@ while ($running)
         }
         else
         {
-          $reply = "You can't drink the $reply.";
+          $reply = "You can't drink from the $reply.";
         }
       }
       else
