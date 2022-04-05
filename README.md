@@ -43,13 +43,13 @@ Hash tables can also be used for handling synonyms.  If COMMAND-HASH["GO"], COMM
 
 If your game allows the player to carry an inventory, all that you need is a way of setting the room attribute on the object to some special "I'm carrying it" inventory value.  A "GET" command would set the room value on the object to that inventory value.  A "DROP" command would set the room value on the object to the current room and clear it from the inventory.
 
-Similarly, objects can be "hidden" until some future event by setting an invalid room value.  For example, a rare gem may remain hidden until the treasure chest is opened.  Once the chest is opened, the invalid room value on the gem can be set to the room value of the chest, thereby bringing the rare gem into the game.
+Similarly, objects can be "hidden" until some future event occurs by setting an invalid room value.  For example, a rare gem may remain hidden until the treasure chest is opened.  Once the chest is opened, the invalid room value on the gem can be set to the room value of the chest, thereby bringing the rare gem into the game.
 
 The program itself functions like one giant state machine, continually looping until you quit.  As the player types in commands, hash tables are used to translate those three-character ids into indexes within the information tables.  Each command simply updates some attribute of the information table (like an object room number or status) and then displays a message using the friendly name read from that same information table.  The goal is to create a generic command handler, for which most of the actual work is simply updating a value in the associated information table.
 
 That's really all that needs to be done to create your own game.
 
-A sample batch file script launcher has been included with this project, as many players may not know how to start PowerShell.  The launcher allows players to easily start the game by double-clicking on a batch file.
+A sample batch file script launcher has been included with this project, as many players may not know how to start PowerShell.  The launcher allows players to easily start the game by double-clicking on the batch file.
 
 I've also included a batch file that attempts to set the PowerShell execution policy to "RemoteSigned" and unblock the game script.  The batch file must be started with the right-click "Run as administrator" option.  Be sure to extract all files from this project into the same folder.
 
