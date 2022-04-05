@@ -1,4 +1,5 @@
 # Clues Adventure
+[Home](https://github.com/tigerpointe/Clues-Adventure)
 
 ## Copyright (c) 2022 TigerPointe Software, LLC
 
