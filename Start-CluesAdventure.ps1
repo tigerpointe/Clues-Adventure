@@ -60,6 +60,7 @@ If you enjoy this game, please do something kind for free.
 
 Dedicated to the memory of Tim Hartnell, Master Gamesman (1951-1991)
 Read "Creating Adventure Games on Your Computer" ISBN 0-345-31883-8
+
 Please give to cancer research!
 
 History:
@@ -67,6 +68,7 @@ History:
 01.01 2022-Mar-28 Scott S. Added requires version.
 01.02 2022-Mar-29 Scott S. Added ambiguous object handling.
 01.03 2022-Apr-01 Scott S. Added spontaneous object handling.
+01.04 2022-Apr-06 Scott S. Added roaming non-player characters.
 
 .LINK
 https://en.wikipedia.org/wiki/Cluedo
@@ -110,7 +112,7 @@ Read-Host  "            Press the <Enter> Key to Start ...";
 # Name, North, South, West, East, Up, Down, Secret Door, Lock, Dark, Id, Check
 $map = @(
 
-("Kitchen"        , -1,  3, -1,  1, -1,  4,  9, 0, 0, "kit", 0),
+("Kitchen"        , -1,  3, -1,  1, 12,  4,  9, 0, 0, "kit", 0),
 ("Ballroom"       , -1, -1,  0,  2, -1, -1, -1, 0, 0, "bal", 0),
 ("Conservatory"   , -1,  5,  1, -1, -1, -1,  7, 0, 0, "con", 0),
 ("Dining Room"    ,  0,  7, -1, -1, -1, -1, -1, 0, 0, "din", 0),
@@ -123,7 +125,7 @@ $map = @(
 
 ("Crypt"          ,  4, -1, -1, -1, -1, -1, -1, 1, 1, "cry", 1),
 ("Master Bedroom" , -1, 13, -1, -1, -1, -1, -1, 0, 0, "mas", 0),
-("Guest Bedroom"  , -1, -1, -1, 13, -1, -1, -1, 0, 0, "gue", 0),
+("Servant Bedroom", -1, -1, -1, 13, -1,  0, -1, 0, 0, "ser", 0),
 ("Upstairs Hall"  , 11, -1, 12, 14, 15,  8, -1, 0, 0, "ups", 0),
 ("Bath"           , -1, -1, 13, -1, -1, -1, -1, 0, 0, "bat", 0),
 ("Attic"          , -1, -1, -1, -1, -1, 13, -1, 0, 1, "att", 0)
@@ -525,6 +527,26 @@ while ($running)
     continue;
   }
 
+  # Choose a roaming non-player character; the chosen character cannot be the
+  # body or the murderer; do not move the chosen character into the current
+  # room, the crypt, or a locked room; also, do not move the chosen character
+  # out of the current room
+  $chance = (Get-Random -Maximum 100);
+  if ($chance -ge $difficulty)
+  {
+    $roam = (Get-Random -Maximum $npc.Length);
+    while (($roam -eq $body) -or ($roam -eq $murderer))
+    {
+      $roam = (Get-Random -Maximum $npc.Length);
+    }
+    $escape = (Get-Random -Maximum $map.Length);
+    if (($escape -ne $room) -and ($escape -ne $crypt) -and `
+      ($map[$escape][8] -eq 0) -and ($npc[$roam][2] -ne $room))
+    {
+      $npc[$roam][2] = $escape;
+    }
+  }
+
   # Write the status information
   Clear-Host;
   $darkness = ($map[$room][9] -gt 0); # room is dark?  candlestick is ...
@@ -832,8 +854,8 @@ while ($running)
           if ($map[$cellar][8] -gt 0)         # cellar is locked?
           {
             if ((($inventory -eq $axe) -or `  # object is blunt instrument?
-              ($inventory  -eq $pipe) -or `     
-              ($inventory  -eq $wrench))) 
+              ($inventory -eq $pipe) -or `     
+              ($inventory -eq $wrench))) 
             {
 
               # Some objects break locks
