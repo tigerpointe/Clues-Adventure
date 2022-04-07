@@ -7,10 +7,12 @@ Starts a new tiny text adventure inspired by a well-known mystery board game.
 Solve the murder mystery by deducing the correct suspect, room and weapon.
 Move around the manor by entering compass directions (n, s, w, e, u and d).
 Interact with the suspects and weapons by entering two-word text commands.
-Most text commands are composed of a verb and a noun.
+Most text commands are constructed as a verb followed by a noun.
 Suggest possible suspects, rooms and weapons to collect hints about the crime.
-Various objects may also provide important clues about the murder.
+Various other objects may provide important clues, such as the motive.
 When you are ready, accuse your suspect to finish the game.
+
+Please give to cancer research!
 
 .PARAMETER difficulty
 Specifies a difficulty level for the random game elements (0-99).
@@ -61,17 +63,19 @@ If you enjoy this game, please do something kind for free.
 Dedicated to the memory of Tim Hartnell, Master Gamesman (1951-1991)
 Read "Creating Adventure Games on Your Computer" ISBN 0-345-31883-8
 
-Please give to cancer research!
-
 History:
 01.00 2022-Mar-18 Scott S. Initial release.
 01.01 2022-Mar-28 Scott S. Added requires version.
 01.02 2022-Mar-29 Scott S. Added ambiguous object handling.
 01.03 2022-Apr-01 Scott S. Added spontaneous object handling.
 01.04 2022-Apr-06 Scott S. Added roaming non-player characters.
+01.05 2022-Apr-07 Scott S. Fixed typos.
 
 .LINK
 https://en.wikipedia.org/wiki/Cluedo
+
+.LINK
+https://braintumor.org/
 
 #>
 #Requires -Version 5.1
@@ -222,26 +226,27 @@ for ($i = 0; $i -lt $obj.Length; $i++)
 
 # Command structure
 # Verb, Id, Usage, Visible
+# The "help" command is an alias for "check commands"
 $cmd = @(
 
-("accuse" , "acc", "accuse  [suspect] (while at crime scene)"   , 1),
-("ask"    , "ask", "ask     [suspect]"                          , 1),
-("break"  , "bre", "break   [object]"                           , 1),
-("call"   , "cal", "call    [suspect]"                          , 1),
-("check"  , "che", "check   [commands|rooms|suspects|weapons]"  , 1),
-("debug"  , "deb", "debug"                                      , 0),
-("drain"  , "dra", "drain   [object]"                           , 0),
-("drink"  , "dri", "drink   [object]"                           , 0),
-("drop"   , "dro", "drop    [object]"                           , 1),
-("examine", "exa", "examine [object|suspect]"                   , 1),
-("get"    , "get", "get     [object]"                           , 1),
-("kill"   , "kil", "kill    [suspect] (while holding a weapon)" , 0),
-("kiss"   , "kis", "kiss    [suspect]"                          , 0),
-("quit"   , "qui", "quit"                                       , 1),
-("read"   , "rea", "read    [object]"                           , 1),
-("suggest", "sug", "suggest [suspect] (while at crime scene)"   , 1),
-("use"    , "use", "use     [object]"                           , 1),
-("walk"   , "wal", "walk    [direction]"                        , 1)
+("accuse" , "acc", "accuse  [suspect] (while at crime scene)"         , 1),
+("ask"    , "ask", "ask     [suspect]"                                , 1),
+("break"  , "bre", "break   [object]"                                 , 1),
+("call"   , "cal", "call    [suspect]"                                , 1),
+("check"  , "che", "check   ['commands'|'rooms'|'suspects'|'weapons']", 1),
+("debug"  , "deb", "debug"                                            , 0),
+("drain"  , "dra", "drain   [object]"                                 , 0),
+("drink"  , "dri", "drink   [object]"                                 , 0),
+("drop"   , "dro", "drop    [object]"                                 , 1),
+("examine", "exa", "examine [object|suspect]"                         , 1),
+("get"    , "get", "get     [object]"                                 , 1),
+("kill"   , "kil", "kill    [suspect] (while holding a weapon)"       , 0),
+("kiss"   , "kis", "kiss    [suspect]"                                , 0),
+("quit"   , "qui", "quit"                                             , 1),
+("read"   , "rea", "read    [object]"                                 , 1),
+("suggest", "sug", "suggest [suspect] (while at crime scene)"         , 1),
+("use"    , "use", "use     [object]"                                 , 1),
+("walk"   , "wal", "walk    [direction]"                              , 1)
 );
 
 # Command hash allows the array indexes to be found by the id
@@ -1690,7 +1695,7 @@ while ($running)
  # WALK to the Kitchen.
  # GET the AXE, LEAD PIPE or WRENCH (whatever is found).
  # USE either the AXE, LEAD PIPE or WRENCH to BREAK the Cellar LOCK.
- # GET the CANDLESTICK to dispel the Cellar darkness.
+ # GET the CANDLESTICK to dispel the darkness in the Cellar.
  # WALK DOWN into the Cellar.
  # READ the PAPER to reveal an updated "Last Will and Testament".
  # One of the suspects has been removed from Mr. Mortem's new will (murderer).
