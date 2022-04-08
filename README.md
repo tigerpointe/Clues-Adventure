@@ -2,7 +2,7 @@
 
 ## Copyright (c) 2022 TigerPointe Software, LLC
 
-[Home](https://github.com/tigerpointe/Clues-Adventure)
+[Download Clues Adventure](https://github.com/tigerpointe/Clues-Adventure) from GitHub.
 
 Nothing makes me happier than to take a powerful administrative tool, like PowerShell, and completely misuse it for the purposes of entertainment.
 
