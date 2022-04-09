@@ -70,6 +70,7 @@ History:
 01.03 2022-Apr-01 Scott S. Added spontaneous object handling.
 01.04 2022-Apr-06 Scott S. Added roaming non-player characters.
 01.05 2022-Apr-07 Scott S. Fixed typos.
+01.06 2022-Apr-08 Scott S. Added outdoor locations.
 
 .LINK
 https://en.wikipedia.org/wiki/Cluedo
@@ -114,25 +115,33 @@ Read-Host  "            Press the <Enter> Key to Start ...";
 
 # Map structure:
 # Name, North, South, West, East, Up, Down, Secret Door, Lock, Dark, Id, Check
+# Use the Study index and lower to identify the original game locations
+# Use the Attic index and lower to identify the indoor game locations
 $map = @(
 
-("Kitchen"        , -1,  3, -1,  1, 12,  4,  9, 0, 0, "kit", 0),
-("Ballroom"       , -1, -1,  0,  2, -1, -1, -1, 0, 0, "bal", 0),
-("Conservatory"   , -1,  5,  1, -1, -1, -1,  7, 0, 0, "con", 0),
-("Dining Room"    ,  0,  7, -1, -1, -1, -1, -1, 0, 0, "din", 0),
-("Cellar"         , -1, 10, -1, -1,  0, -1, -1, 1, 1, "cel", 1),
-("Billiard Room"  ,  2,  6, -1, -1, -1, -1, -1, 0, 0, "bil", 0),
-("Library"        ,  5,  9, -1, -1, -1, -1, -1, 0, 0, "lib", 0),
-("Lounge"         ,  3, -1, -1,  8, -1, -1,  2, 0, 0, "lou", 0),
-("Great Hall"     , -1, -1,  7,  9, 13, -1, -1, 0, 0, "gre", 0),
-("Study"          ,  6, -1,  8, -1, -1, -1,  0, 0, 0, "stu", 0),
+("Kitchen"         , 16,  3, -1,  1, 12,  4,  9, 0, 0, "kit", 0),
+("Ballroom"        , -1, -1,  0,  2, -1, -1, -1, 0, 0, "bal", 0),
+("Conservatory"    , -1,  5,  1, -1, -1, -1,  7, 0, 0, "con", 0),
+("Dining Room"     ,  0,  7, -1, -1, -1, -1, -1, 0, 0, "din", 0),
+("Cellar"          , -1, 10, -1, -1,  0, -1, -1, 1, 1, "cel", 1),
+("Billiard Room"   ,  2,  6, -1, -1, -1, -1, -1, 0, 0, "bil", 0),
+("Library"         ,  5,  9, -1, -1, -1, -1, -1, 0, 0, "lib", 0),
+("Lounge"          ,  3, -1, -1,  8, -1, -1,  2, 0, 0, "lou", 0),
+("Great Hall"      , -1, 19,  7,  9, 13, -1, -1, 0, 0, "gre", 0),
+("Study"           ,  6, -1,  8, -1, -1, -1,  0, 0, 0, "stu", 0),
 
-("Crypt"          ,  4, -1, -1, -1, -1, -1, -1, 1, 1, "cry", 1),
-("Master Bedroom" , -1, 13, -1, -1, -1, -1, -1, 0, 0, "mas", 0),
-("Servant Bedroom", -1, -1, -1, 13, -1,  0, -1, 0, 0, "ser", 0),
-("Upstairs Hall"  , 11, -1, 12, 14, 15,  8, -1, 0, 0, "ups", 0),
-("Bath"           , -1, -1, 13, -1, -1, -1, -1, 0, 0, "bat", 0),
-("Attic"          , -1, -1, -1, -1, -1, 13, -1, 0, 1, "att", 0)
+("Crypt"           ,  4, -1, -1, -1, -1, -1, -1, 1, 1, "cry", 1),
+("Master Bedroom"  , -1, 13, -1, -1, -1, -1, -1, 0, 0, "mas", 0),
+("Servant Bedroom" , -1, -1, -1, 13, -1,  0, -1, 0, 0, "ser", 0),
+("Upstairs Hall"   , 11, -1, 12, 14, 15,  8, -1, 0, 0, "ups", 0),
+("Bath"            , -1, -1, 13, -1, -1, -1, -1, 0, 0, "bat", 0),
+("Attic"           , -1, -1, -1, -1, -1, 13, -1, 0, 1, "att", 0),
+
+("Secret Garden"   , -1,  0, -1, -1, -1, -1, -1, 0, 0, "sec", 1),
+("Overgrown Forest", 17, 17, 17, 19, -1, -1, -1, 0, 0, "wof", 1),
+("Overgrown Forest", 18, 18, 19, 18, -1, -1, -1, 0, 0, "eof", 1),
+("Front Courtyard" ,  8, -1, 17, 18, -1, -1, -1, 0, 0, "fro", 1)
+
 
 );
 $mapName = "Raven Manor";
@@ -206,6 +215,7 @@ $obj = @(
 ("dining table" ,"din", 3,1,"It looks really old."                    ,0,1,0),
 ("document"     ,"doc",11,1,"It's {0}'s `"{1}`"."                     ,0,0,0),
 ("exotic plant" ,"exo",15,1,"It's carnivorous and bites your finger." ,0,0,0),
+("pretty flower","pre",16,1,"It's vibrant purple with white splashes.",0,0,0),
 ("lock"         ,"loc", 0,1,"The {0} lock is rusted and weakened."    ,0,1,0),
 ("old mattress" ,"mat",12,1,"It's very stained."                      ,0,0,0),
 ("paper"        ,"pap", 4,1,"It's {0}'s updated `"{1}`"."             ,0,0,0),
@@ -362,6 +372,9 @@ $synoh["pip"] = "pip"; # pipe
 $synoh["poi"] = "poi"; # poison
 $synoh["bot"] = "poi"; # bottle
 
+$synoh["pre"] = "pre"; # pretty
+$synoh["flo"] = "pre"; # flower
+
 $synoh["gun"] = "rev"; # gun
 $synoh["rev"] = "rev"; # revolver
 
@@ -388,6 +401,7 @@ $synoh["pro"] = "pea"; # professor
 $synoh["pea"] = "pea"; # peach
 
 # Frequently used data indexes
+$attic       = $maph["att"];
 $billiard    = $maph["bil"];
 $cellar      = $maph["cel"];
 $crypt       = $maph["cry"];
@@ -504,8 +518,8 @@ switch($weapon)
    
 }
 
-# Choose a random body location (other than the cellar or crypt)
-$location = (Get-Random -Maximum $map.Length);
+# Choose a random body location (indoor room, but not the cellar or crypt)
+$location = (Get-Random -Maximum ($attic + 1));
 while (($location -eq $cellar) -or ($location -eq $crypt))
 {
   $location = (Get-Random -Maximum $map.Length);
@@ -727,6 +741,12 @@ while ($running)
   {
     Write-Host "> $reply";
     $reply = "";
+  }
+
+  # Show the lost message
+  if (($map[$room][10] -eq "wof") -or ($map[$room][10] -eq "eof"))
+  {
+    "> You appear to be lost in the $($map[$room][0]).";
   }
 
   # Read and parse the next command (first three characters only)
@@ -957,12 +977,13 @@ while ($running)
   if ($command -eq "che")
   {
 
-    # List map
+    # List map (indoor locations only)
     if ($object -eq "map")
     {
       $reply = "The list of rooms include:";
-      foreach ($m in $map)
+      for ($i = 0; $i -le $attic; $i++)
       {
+        $m = $map[$i];
         if ($m[8] -eq 0) # room is not locked?
         {
           $check = " ";
@@ -1534,13 +1555,16 @@ while ($running)
               {
                 $idx   = $idxs[$rnd];
                 $reply = "$reply`n  $speaker says `"$hint`"";
-                $safe  = $ref[$idx][0];
-                $reply = "$reply`n  The item `"$safe`" has been marked-off";
-                $reply = "$reply in your notebook.";
-                $reply = "$reply`n  Enter `"check $tmp`" for details.";
                 $last  = ($ref[$idx].Length - 1);
-                $ref[$idx][$last] = 1;
-                $parsed           = $true;
+                if ($ref[$idx][$last] -eq 0)
+                {
+                  $safe  = $ref[$idx][0];
+                  $reply = "$reply`n  The item `"$safe`" has been marked-off";
+                  $reply = "$reply in your notebook.";
+                  $reply = "$reply`n  Enter `"check $tmp`" for details.";
+                  $ref[$idx][$last] = 1;
+                }
+                $parsed = $true;
               }
 
             }
@@ -1667,7 +1691,8 @@ while ($running)
   {
     if ($map[$next][8] -eq 0) # next room is not locked?
     {
-      $room = $next;
+      $room  = $next;
+      $reply = "Okay.";
     }
     else
     {
