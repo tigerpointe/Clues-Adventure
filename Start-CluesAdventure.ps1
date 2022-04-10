@@ -70,7 +70,7 @@ History:
 01.03 2022-Apr-01 Scott S. Added spontaneous object handling.
 01.04 2022-Apr-06 Scott S. Added roaming non-player characters.
 01.05 2022-Apr-07 Scott S. Fixed typos.
-01.06 2022-Apr-08 Scott S. Added outdoor locations.
+01.06 2022-Apr-10 Scott S. Added outdoor locations.
 
 .LINK
 https://en.wikipedia.org/wiki/Cluedo
@@ -119,28 +119,28 @@ Read-Host  "            Press the <Enter> Key to Start ...";
 # Use the Attic index and lower to identify the indoor game locations
 $map = @(
 
-("Kitchen"         , 16,  3, -1,  1, 12,  4,  9, 0, 0, "kit", 0),
-("Ballroom"        , -1, -1,  0,  2, -1, -1, -1, 0, 0, "bal", 0),
-("Conservatory"    , -1,  5,  1, -1, -1, -1,  7, 0, 0, "con", 0),
-("Dining Room"     ,  0,  7, -1, -1, -1, -1, -1, 0, 0, "din", 0),
-("Cellar"          , -1, 10, -1, -1,  0, -1, -1, 1, 1, "cel", 1),
-("Billiard Room"   ,  2,  6, -1, -1, -1, -1, -1, 0, 0, "bil", 0),
-("Library"         ,  5,  9, -1, -1, -1, -1, -1, 0, 0, "lib", 0),
-("Lounge"          ,  3, -1, -1,  8, -1, -1,  2, 0, 0, "lou", 0),
-("Great Hall"      , -1, 19,  7,  9, 13, -1, -1, 0, 0, "gre", 0),
-("Study"           ,  6, -1,  8, -1, -1, -1,  0, 0, 0, "stu", 0),
+("Kitchen"        , 16,  3, -1,  1, 12,  4,  9, 0, 0, "kit", 0),
+("Ballroom"       , -1, -1,  0,  2, -1, -1, -1, 0, 0, "bal", 0),
+("Conservatory"   , -1,  5,  1, -1, -1, -1,  7, 0, 0, "con", 0),
+("Dining Room"    ,  0,  7, -1, -1, -1, -1, -1, 0, 0, "din", 0),
+("Cellar"         , -1, 10, -1, -1,  0, -1, -1, 1, 1, "cel", 1),
+("Billiard Room"  ,  2,  6, -1, -1, -1, -1, -1, 0, 0, "bil", 0),
+("Library"        ,  5,  9, -1, -1, -1, -1, -1, 0, 0, "lib", 0),
+("Lounge"         ,  3, -1, -1,  8, -1, -1,  2, 0, 0, "lou", 0),
+("Great Hall"     , -1, 19,  7,  9, 13, -1, -1, 0, 0, "gre", 0),
+("Study"          ,  6, -1,  8, -1, -1, -1,  0, 0, 0, "stu", 0),
 
-("Crypt"           ,  4, -1, -1, -1, -1, -1, -1, 1, 1, "cry", 1),
-("Master Bedroom"  , -1, 13, -1, -1, -1, -1, -1, 0, 0, "mas", 0),
-("Servant Bedroom" , -1, -1, -1, 13, -1,  0, -1, 0, 0, "ser", 0),
-("Upstairs Hall"   , 11, -1, 12, 14, 15,  8, -1, 0, 0, "ups", 0),
-("Bath"            , -1, -1, 13, -1, -1, -1, -1, 0, 0, "bat", 0),
-("Attic"           , -1, -1, -1, -1, -1, 13, -1, 0, 1, "att", 0),
+("Crypt"          ,  4, -1, -1, -1, -1, -1, -1, 1, 1, "cry", 1),
+("Master Bedroom" , -1, 13, -1, -1, -1, -1, -1, 0, 0, "mas", 0),
+("Servant Bedroom", -1, -1, -1, 13, -1,  0, -1, 0, 0, "ser", 0),
+("Upstairs Hall"  , 11, -1, 12, 14, 15,  8, -1, 0, 0, "ups", 0),
+("Bath"           , -1, -1, 13, -1, -1, -1, -1, 0, 0, "bat", 0),
+("Attic"          , -1, -1, -1, -1, -1, 13, -1, 0, 1, "att", 0),
 
-("Secret Garden"   , -1,  0, -1, -1, -1, -1, -1, 0, 0, "sec", 1),
-("Overgrown Forest", 17, 17, 17, 19, -1, -1, -1, 0, 0, "wof", 1),
-("Overgrown Forest", 18, 18, 19, 18, -1, -1, -1, 0, 0, "eof", 1),
-("Front Courtyard" ,  8, -1, 17, 18, -1, -1, -1, 0, 0, "fro", 1)
+("Backyard Garden", -1,  0, -1, -1, -1, -1, -1, 0, 0, "out", 1),
+("Forest"         , 17, 17, 17, 19, -1, -1, -1, 0, 0, "fow", 1), # west
+("Forest"         , 18, 18, 19, 18, -1, -1, -1, 0, 0, "foe", 1), # east
+("Front Courtyard",  8, -1, 17, 18, -1, -1, -1, 0, 0, "fro", 1)
 
 
 );
@@ -744,7 +744,7 @@ while ($running)
   }
 
   # Show the lost message
-  if (($map[$room][10] -eq "wof") -or ($map[$room][10] -eq "eof"))
+  if (($map[$room][10] -eq "fow") -or ($map[$room][10] -eq "foe"))
   {
     "> You appear to be lost in the $($map[$room][0]).";
   }
