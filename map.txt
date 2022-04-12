@@ -1,0 +1,32 @@
+     N                 Attic
+   W + E
+     S
+
+                   Master Bedroom
+                         |
+Servant Bedroom -  Upstairs Hall   -    Bath
+
+
+
+Backyard Garden
+       |
+    Kitchen     -    Ballroom      - Conservatory
+       |                                  |
+       |                             Billiard Room
+  Dining Room                             |
+       |                               Library
+       |                                  |
+     Lounge     -    Great Hall    -    Study
+                         |
+  Forest West   -  Front Courtyard - Forest (East)
+
+
+
+    Cellar
+      |
+    Crypt
+
+
+
+* Secret door connects the Kitchen and Study
+* Secret door connects the Lounge and Conservatory
