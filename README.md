@@ -6,9 +6,13 @@
 
 [Download Clues Adventure](https://github.com/tigerpointe/Clues-Adventure) from GitHub.
 
+## Introduction
+
 Nothing makes me happier than to take a powerful administrative tool, like PowerShell, and completely misuse it for the purposes of entertainment.
 
-This PowerShell script demonstrates how to write an "old school" text adventure game.  It is written much like the BASIC programs of the 1980s -- with no functions or variable scope.  Everything is global for simplicity.
+This PowerShell script demonstrates how to write an "old school" text adventure game, sometimes known as Interactive Fiction (IF).  It is written much like the BASIC programs of the 1980s -- with no functions or variable scope.  Everything is global for simplicity.
+
+## Setup
 
 To enable PowerShell scripts, you may need to update your execution policy.  Find the PowerShell icon on your system, right-click and select the "Run as administrator" option.  Then, type ...
 
@@ -17,6 +21,8 @@ To enable PowerShell scripts, you may need to update your execution policy.  Fin
 ... and press the enter key.  Type "Y" and press the enter key again.  When the execution policy is set as "Unrestricted", PowerShell will prompt you for a confirmation before running any untrusted scripts.  By default, PowerShell will not run any scripts downloaded from the Internet (unless digitally signed).
 
 More secure PowerShell options exist that involve unblocking or bypassing the individual script file.  Before making any changes, a detailed understanding of PowerShell security is highly recommended.  In Windows 11, you can simply right-click on the game script and select the "Run as PowerShell" option.
+
+## Game
 
 The text adventure game first displays information about the current room, and then accepts two-word commands that are used to interact with the characters and objects.  Each command is split on the space, and the first three characters of each word are retrieved.  If a word is longer than three characters, the value is trimmed.  In this game, the three-characters must uniquely identify a room, object, character or command.
 
@@ -28,6 +34,10 @@ A player would enter the two-word (verb and noun) commands as follows:
 Compass directions can be simplified and entered as a single word or letter.  So, "WALK NORTH" would be equivalent to "NORTH" or "N".
 
 More complicated commands can be constructed to prompt the player for additional information.  For example, entering "ACCUSE COLONEL" might then ask the player to identify a specific murder weapon.
+
+Be creative and try different commands until the mystery is solved.
+
+## Code
 
 Information tables are used to define the rooms, objects, characters and commands.  In this script, two dimensional arrays have been implemented.  However, object-oriented classes could have just as easily been implemented, as well as database tables.  The important point here is to have your items represented as rows, with each column representing a different attribute of the item.
 
@@ -53,6 +63,13 @@ That's really all that needs to be done to create your own game.
 
 A sample batch file script launcher has been included with this project, as many players may not know how to start PowerShell.  The launcher allows players to easily start the game by double-clicking on the batch file.
 
-I've also included a batch file that attempts to set the PowerShell execution policy to "RemoteSigned" and unblock the game script.  The batch file must be started with the right-click "Run as administrator" option.  Be sure to extract all files from this project into the same folder.
+I've also included a batch file that attempts to set the PowerShell execution policy to "RemoteSigned" and unblock the game script (as an alternative to setting the execution policy to "Unrestricted").  The batch file must be started with the right-click "Run as administrator" option.  Be sure to extract all files from this project into the same folder.
 
 Journey on, adventurer!
+
+## Make a Difference
+
+If you found this tutorial useful, please consider a donation to any charity of your choice.  If you or a loved one has been affected by cancer, please consider one of the following:
+
+[American Cancer Society](https://www.cancer.org)
+[National Brain Tumor Society](https://braintumor.org)
