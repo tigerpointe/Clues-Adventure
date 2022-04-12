@@ -69,7 +69,7 @@ Journey on, adventurer!
 
 ## Make a Difference
 
-If you found this tutorial useful, please consider a donation to any charity of your choice.  If you or a loved one has been affected by cancer, please consider one of the following:
+If you found this tutorial useful, please consider a donation to any charity of your choice.  If you or a loved one has ever been affected by cancer, please consider one of the following:
 
 [American Cancer Society](https://www.cancer.org)
 
