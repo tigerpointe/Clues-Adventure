@@ -18,7 +18,7 @@ Backyard Garden
        |                                  |
      Lounge     -    Great Hall    -    Study
                          |
-  Forest West   -  Front Courtyard - Forest (East)
+ Forest (West)  -  Front Courtyard - Forest (East)
 
 
 
