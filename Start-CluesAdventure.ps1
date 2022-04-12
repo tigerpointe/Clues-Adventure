@@ -5,7 +5,7 @@ Starts a new tiny text adventure inspired by a well-known mystery board game.
 
 .DESCRIPTION
 Solve the murder mystery by deducing the correct suspect, room and weapon.
-Move around the manor by entering compass directions (n, s, w, e, u and d).
+Navigate the manor by entering compass directions (n, s, w, e, u and d).
 Interact with the suspects and weapons by entering two-word text commands.
 Most text commands are constructed as a verb followed by a noun.
 Suggest possible suspects, rooms and weapons to collect hints about the crime.
@@ -71,12 +71,16 @@ History:
 01.04 2022-Apr-06 Scott S. Added roaming non-player characters.
 01.05 2022-Apr-07 Scott S. Fixed typos.
 01.06 2022-Apr-10 Scott S. Added outdoor locations.
+01.07 2022-Apr-12 Scott S. Optimized code.
 
 .LINK
 https://en.wikipedia.org/wiki/Cluedo
 
 .LINK
-https://braintumor.org/
+https://braintumor.org
+
+.LINK
+https://www.cancer.org
 
 #>
 #Requires -Version 5.1
@@ -142,7 +146,6 @@ $map = @(
 ("Forest"         , 18, 18, 19, 18, -1, -1, -1, 0, 0, "foe", 1), # east
 ("Front Courtyard",  8, -1, 17, 18, -1, -1, -1, 0, 0, "fro", 1)
 
-
 );
 $mapName = "Raven Manor";
 
@@ -178,7 +181,7 @@ for ($i = 0; $i -lt $npc.Length; $i++)
   $npch[$npc[$i][1]] = $i;
 }
 
-# Non-player character text replies
+# Non-player character text replies (related by the array index)
 $txt = @(
 
 "Well, it sure wasn't a suicide.",
@@ -197,6 +200,7 @@ $txt = @(
 
 # Object structure:
 # Name, Id, Room, Active, Description, Weapon, Fixed, Check
+# Use the wrench index and lower to identify the original game weapons
 # Objects can be "hidden" by setting the room number to an invalid value
 $obj = @(
 
@@ -428,7 +432,7 @@ $tub         = $objh["tub"];
 # Initialization
 $dead      =  $npc[$body][4]; # dead body message
 $count     =  0;              # move count
-$room      =  $maph["gre"];   # starting room (Great Hall)
+$room      =  $maph["gre"];   # starting room ("Great Hall")
 $inventory = -1;              # no object currently being carried
 
 # Configure the mystery motive description
@@ -465,8 +469,8 @@ $npc[$murderer][2] = $crypt;
 # Swap random object locations (weapons only)
 for ($i = 0; $i -lt 100; $i++)
 {
-  $x = (Get-Random -Maximum $obj.Length);
-  $y = (Get-Random -Maximum $obj.Length);
+  $x = (Get-Random -Maximum ($wrench + 1));
+  $y = (Get-Random -Maximum ($wrench + 1));
   if (($obj[$x][5] -gt 0) -and ($obj[$y][5] -gt 0))
   {
     $z = $obj[$x][2];
@@ -476,10 +480,10 @@ for ($i = 0; $i -lt 100; $i++)
 }
 
 # Send a random object to the crypt (weapon only)
-$weapon = (Get-Random -Maximum $obj.Length);
+$weapon = (Get-Random -Maximum ($wrench + 1));
 while ($obj[$weapon][5] -eq 0)
 {
-  $weapon = (Get-Random -Maximum $obj.Length);
+  $weapon = (Get-Random -Maximum ($wrench + 1));
 }
 $obj[$weapon][2] = $crypt;
 
@@ -522,7 +526,7 @@ switch($weapon)
 $location = (Get-Random -Maximum ($attic + 1));
 while (($location -eq $cellar) -or ($location -eq $crypt))
 {
-  $location = (Get-Random -Maximum $map.Length);
+  $location = (Get-Random -Maximum ($attic + 1));
 }
 $npc[$body][2] = $location;
 
@@ -743,13 +747,13 @@ while ($running)
     $reply = "";
   }
 
-  # Show the lost message
+  # Show the lost message (Forest West or Forest East)
   if (($map[$room][10] -eq "fow") -or ($map[$room][10] -eq "foe"))
   {
     "> You appear to be lost in the $($map[$room][0]).";
   }
 
-  # Read and parse the next command (first three characters only)
+  # Read and parse the next command (first three characters of each word only)
   $parsed  = $false;
   $readcmd = Read-Host "> What do you want to do?";
   $object  = "";
@@ -1018,8 +1022,9 @@ while ($running)
     if ($object -eq "obj")
     {
       $reply = "The list of weapons include:";
-      foreach ($o in $obj)
+      for ($i = 0; $i -le $wrench; $i++)
       {
+        $o = $obj[$i];
         if ($o[5] -gt 0)   # object is weapon?
         {
           $check = " ";
@@ -1601,7 +1606,7 @@ while ($running)
             if ($obj[$mattress][2] -eq $room) # mattress in room
             {
 
-              # Mattress shields (using the bomb)
+              # Mattress as shield (using the bomb)
               $shield = $obj[$mattress][0];
               $reply  = "The $reply explodes";
               $reply  = "$reply but you are shielded by the $shield.";
@@ -1624,7 +1629,7 @@ while ($running)
             }
           }
           elseif ((($key -eq $axe) -or ` # object is blunt instrument
-            ($key  -eq $pipe)    -or `   #   and room is kitchen
+            ($key  -eq $pipe)      -or ` #   and room is kitchen
             ($key  -eq $wrench)) -and `  #   and cellar is locked
             ($room -eq $kitchen) -and ($map[$cellar][8] -gt 0))
           {
@@ -1720,7 +1725,7 @@ while ($running)
  # WALK to the Kitchen.
  # GET the AXE, LEAD PIPE or WRENCH (whatever is found).
  # USE either the AXE, LEAD PIPE or WRENCH to BREAK the Cellar LOCK.
- # GET the CANDLESTICK to dispel the darkness in the Cellar.
+ # GET the CANDLESTICK to clear the darkness in the Cellar.
  # WALK DOWN into the Cellar.
  # READ the PAPER to reveal an updated "Last Will and Testament".
  # One of the suspects has been removed from Mr. Mortem's new will (murderer).
