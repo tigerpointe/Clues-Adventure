@@ -2,7 +2,7 @@
 
 ## Copyright (c) 2022 TigerPointe Software, LLC
 
-[Home](https://tigerpointe.github.io/Clues-Adventure) on Github Pages.
+[Home](https://tigerpointe.github.io/Clues-Adventure) on GitHub Pages.
 
 [Download Clues Adventure](https://github.com/tigerpointe/Clues-Adventure) from GitHub.
 

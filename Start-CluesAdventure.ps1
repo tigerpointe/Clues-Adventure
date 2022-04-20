@@ -71,7 +71,7 @@ History:
 01.04 2022-Apr-06 Scott S. Added roaming non-player characters.
 01.05 2022-Apr-07 Scott S. Fixed typos.
 01.06 2022-Apr-10 Scott S. Added outdoor locations.
-01.07 2022-Apr-12 Scott S. Optimized code.
+01.07 2022-Apr-20 Scott S. Optimized code.
 
 .LINK
 https://en.wikipedia.org/wiki/Cluedo
@@ -163,11 +163,11 @@ $npc = @(
 ("Mr. Mortem"     ,"mor",0,0,"You observe a dead body."               ,1),
 
 ("Mr. Brown"      ,"bro",0,1,"He's a politician with a shady past."   ,0),
-("Colonel Custard","cus",2,1,"He's an adventurer in the military."    ,0),
-("Father Green"   ,"gre",1,1,"He's a minister who spent time in jail.",0),
+("Colonel Custard","cus",1,1,"He's an adventurer in the military."    ,0),
+("Father Green"   ,"gre",2,1,"He's a minister who spent time in jail.",0),
 ("Dr. Lotus"      ,"lot",3,1,"She holds a PhD in plant toxicology."   ,0),
-("Professor Peach","pea",6,1,"He has an IQ of 162 and a poor memory." ,0),
-("Mrs. Pheasant"  ,"phe",5,1,"She's a retired actress and socialite." ,0),
+("Professor Peach","pea",5,1,"He has an IQ of 162 and a poor memory." ,0),
+("Mrs. Pheasant"  ,"phe",6,1,"She's a retired actress and socialite." ,0),
 ("Miss Scarlett"  ,"sca",7,1,"She's as dangerous as she is beautiful.",0),
 ("Mrs. Silver"    ,"sil",8,1,"She's the widow of a multi-billionaire.",0),
 ("Mrs. White"     ,"whi",9,1,"She's the caretaker of $mapName."       ,0)
@@ -206,10 +206,10 @@ $obj = @(
 
 ("axe"          ,"axe", 0,1,"It's dull and covered with rust."        ,1,0,0),
 ("bomb"         ,"bom", 1,1,"It smells like a fertilizer explosive."  ,1,0,0),
-("candlestick"  ,"can", 3,1,"It's made of silver with a lit candle."  ,1,0,0),
-("dagger"       ,"dag", 5,1,"The blade is razor sharp."               ,1,0,0),
-("lead pipe"    ,"pip", 6,1,"It's heavy and made of lead."            ,1,0,0),
-("poison bottle","poi", 2,1,"It's marked with a skull and crossbones.",1,0,0),
+("candlestick"  ,"can", 2,1,"It's made of silver with a lit candle."  ,1,0,0),
+("dagger"       ,"dag", 3,1,"The blade is razor sharp."               ,1,0,0),
+("lead pipe"    ,"pip", 5,1,"It's heavy and made of lead."            ,1,0,0),
+("poison bottle","poi", 6,1,"It's marked with a skull and crossbones.",1,0,0),
 ("revolver"     ,"rev", 7,1,"It contains only a single bullet."       ,1,0,0),
 ("rope"         ,"rop", 8,1,"The end is tied into a noose."           ,1,0,0),
 ("wrench"       ,"wre", 9,1,"It's covered with dried blood."          ,1,0,0),
@@ -1723,7 +1723,7 @@ while ($running)
  # WALK to the Master Bedroom.
  # READ the DOCUMENT to view Mr. Mortem's original "Last Will and Testament".
  # WALK to the Kitchen.
- # GET the AXE, LEAD PIPE or WRENCH (whatever is found).
+ # GET the AXE, LEAD PIPE or WRENCH (whichever one is found first).
  # USE either the AXE, LEAD PIPE or WRENCH to BREAK the Cellar LOCK.
  # GET the CANDLESTICK to clear the darkness in the Cellar.
  # WALK DOWN into the Cellar.
