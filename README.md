@@ -1,6 +1,7 @@
 # Clues Adventure
+## Create a Text Adventure With PowerShell
 
-## Copyright (c) 2022 TigerPointe Software, LLC
+### Copyright (c) 2022 TigerPointe Software, LLC
 
 [Home](https://tigerpointe.github.io/Clues-Adventure) on GitHub Pages.
 
@@ -18,7 +19,7 @@ To enable PowerShell scripts, you may need to update your execution policy.  Fin
 
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted
 
-... and press the enter key.  Type "Y" and press the enter key again.  When the execution policy is set as "Unrestricted", PowerShell will prompt you for a confirmation before running any untrusted scripts.  By default, PowerShell will not run any scripts downloaded from the Internet (unless digitally signed).
+... and press the enter key.  Type "Y" and press the enter key again.  When the execution policy is set as "Unrestricted", PowerShell will still prompt you for a confirmation before running any untrusted scripts.  By default, PowerShell will not run any scripts downloaded from the Internet (unless digitally signed).
 
 More secure PowerShell options exist that involve unblocking or bypassing the individual script file.  Before making any changes, a detailed understanding of PowerShell security is highly recommended.  In Windows 11, you can simply right-click on the game script and select the "Run as PowerShell" option.
 
@@ -30,6 +31,11 @@ A player would enter the two-word (verb and noun) commands as follows:
 
         WALK NORTH
         EXAMINE ROPE
+
+Alternatively, a player could enter the equivalent three-character commands:
+
+        WAL NOR
+        EXA ROP
 
 Compass directions can be simplified and entered as a single word or letter.  So, "WALK NORTH" would be equivalent to "NORTH" or "N".
 
