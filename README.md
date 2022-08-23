@@ -1,5 +1,5 @@
 # Clues Adventure
-How to Create a Text Adventure with PowerShell
+How to Create a Text Adventure Using PowerShell
 
 ## Copyright (c) 2022 TigerPointe Software, LLC
 
