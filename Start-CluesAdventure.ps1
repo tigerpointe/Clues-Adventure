@@ -9,6 +9,7 @@ Navigate the manor by entering compass directions (n, s, w, e, u and d).
 Interact with the suspects and weapons by entering two-word text commands.
 Most text commands are constructed as a verb followed by a noun.
 Suggest possible suspects, rooms and weapons to collect hints about the crime.
+Incorrect guesses are automatically checked-off (see the "check" command).
 Various other objects may provide important clues, such as the motive.
 When you are ready, accuse your suspect to finish the game.
 
@@ -72,6 +73,7 @@ History:
 01.05 2022-Apr-07 Scott S. Fixed typos.
 01.06 2022-Apr-10 Scott S. Added outdoor locations.
 01.07 2022-Apr-20 Scott S. Optimized code.
+01.08 2022-Aug-23 Scott S. Added Easter Egg.
 
 .LINK
 https://en.wikipedia.org/wiki/Cluedo
@@ -219,11 +221,12 @@ $obj = @(
 ("dining table" ,"din", 3,1,"It looks really old."                    ,0,1,0),
 ("document"     ,"doc",11,1,"It's {0}'s `"{1}`"."                     ,0,0,0),
 ("exotic plant" ,"exo",15,1,"It's carnivorous and bites your finger." ,0,0,0),
-("pretty flower","pre",16,1,"It's vibrant purple with white splashes.",0,0,0),
 ("lock"         ,"loc", 0,1,"The {0} lock is rusted and weakened."    ,0,1,0),
+("marble statue","mar",19,1,"It's a likeness of Lord Dimwit Flathead.",0,1,0),
 ("old mattress" ,"mat",12,1,"It's very stained."                      ,0,0,0),
 ("paper"        ,"pap", 4,1,"It's {0}'s updated `"{1}`"."             ,0,0,0),
 ("pool table"   ,"poo", 5,1,"The felt is badly worn."                 ,0,1,0),
+("pretty flower","pre",16,1,"It's vibrant purple with white splashes.",0,0,0),
 ("rubber ducky" ,"rub",99,1,"It's yellow and makes a quacking sound." ,0,0,0),
 ("stove"        ,"sto", 0,1,"The gas has been disconnected."          ,0,1,0),
 ("towel"        ,"tow",14,1,"It's blue with yellow duckies."          ,0,0,0),
@@ -309,6 +312,8 @@ $synch["put"] = "dro"; # put
 $synch["exa"] = "exa"; # examine
 $synch["loo"] = "exa"; # look
 $synch["obs"] = "exa"; # observe
+$synch["sme"] = "exa"; # smell
+$synch["squ"] = "exa"; # squeeze
 $synch["tou"] = "exa"; # touch
 $synch["vie"] = "exa"; # view
 
@@ -355,6 +360,9 @@ $synoh["loc"] = "loc"; # lock
 $synoh["map"] = "map"; # map
 $synoh["roo"] = "map"; # room
 $synoh["whe"] = "map"; # where
+
+$synoh["mar"] = "mar"; # marble
+$synoh["sta"] = "mar"; # statue
 
 $synoh["old"] = "mat"; # old
 $synoh["mat"] = "mat"; # mattress
@@ -439,8 +447,10 @@ $inventory = -1;              # no object currently being carried
 $docType           = "Last Will and Testament";
 $obj[$document][4] = ($obj[$document][4] -f $npc[$body][0], $docType);
 $obj[$paper][4]    = ($obj[$paper][4]    -f $npc[$body][0], $docType);
-$motive            = 0; # bitwise initial 0x00
-$allbits           = 3; # bitwise total   0x11
+
+# Use a bitmask to track the mystery motive discovery state
+$motive  = 0; # bitwise initial 0x00
+$allbits = 3; # bitwise total   0x11
 
 # Configure the lock type description
 $obj[$lock][4] = ($obj[$lock][4] -f $map[$cellar][0]);
