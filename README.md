@@ -1,7 +1,8 @@
 # Clues Adventure
-How to Create a Text Adventure Using PowerShell
 
 ## Copyright (c) 2022 TigerPointe Software, LLC
+
+How to Create a Text Adventure Using PowerShell
 
 [Home](https://tigerpointe.github.io/Clues-Adventure) on GitHub Pages.
 
