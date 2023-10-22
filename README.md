@@ -13,6 +13,10 @@ Nothing makes me happier than to take a powerful administrative tool, like Power
 
 This PowerShell script demonstrates how to write an "old school" text adventure game, sometimes known as Interactive Fiction (IF).  It is written much like the BASIC programs of the 1980s -- with no functions or variable scope.  Everything is global for simplicity.
 
+
+![Welcome to Ravel Manor](screenshot.png)
+
+
 ## Setup
 
 To enable PowerShell scripts, you may need to update your execution policy.  Find the PowerShell icon on your system, right-click and select the "Run as administrator" option.  Then, type ...
